@@ -3,6 +3,8 @@ const { faker } = require("@faker-js/faker");
 
 const { Client, LocalAuth } = require("whatsapp-web.js");
 
+let numbersSended = [];
+
 const client = new Client({
   authStrategy: new LocalAuth(),
 });
@@ -18,6 +20,9 @@ client.on("ready", () => {
 client.on("message_create", async (message) => {
   const authorNumber = message.from;
   if (message.fromMe) return;
+  if (numbersSended.includes(authorNumber)) return;
+
+  numbersSended.push(authorNumber);
 
   const randomName = faker.person.fullName();
 
